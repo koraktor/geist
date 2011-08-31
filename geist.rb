@@ -13,33 +13,34 @@ class Geist
       raise "#{@path} is not a Git repository."
     end
   end
-  
+
   def delete(*keys)
     success = true
-    
+
     keys.each do |key|
       if id_for(key).nil?
         success = false
       else
-        cmd "tag -d #{key}"
+        cmd "tag -d '#{key}'"
       end
     end
-    
+
     success
   end
-  
-  def get(key, *keys)
-    key = [key] unless key.is_a? Array
-    keys = key + keys
-    values = []
 
+  def get(*keys)
+    return nil if keys.empty?
+
+    values = []
     keys.each do |key|
       value = nil
-      cmd "cat-file -p #{id_for key}" do |stdin, stdout|
-        blob = stdout.read.strip if select [stdout]
-        value = Marshal.load blob unless blob.empty?
+      status = cmd "show '#{key}'" do |stdin, stdout|
+        if select [stdout]
+          blob = stdout.read.strip
+          value = Marshal.load blob unless blob.empty?
+        end
       end
-      values << value
+      values << (status.success? ? value : nil)
     end
 
     keys.size == 1 ? values.first : values
@@ -55,32 +56,23 @@ class Geist
 
   def set(keys, value = nil)
     keys = { keys => value } unless keys.is_a? Hash
-    
-    keys.each do |key, value|
+
+    keys.each do |key, val|
+      if key.to_s.match /(?:[\W\s^~:?*\[\\]|\.\.|@\{|(?:\/|\.|\.lock)$)/
+        warn "Invalid key '#{key}'"
+        return
+      end
+
       delete key unless id_for(key).nil?
 
-      value = Marshal.dump value
       id = nil
       cmd 'hash-object --stdin -w' do |stdin, stdout|
-        stdin.write value
+        stdin.write Marshal.dump(val)
         stdin.close
         id = stdout.read.strip if select [stdout]
       end
-      
-      cmd 'mktag' do |stdin, stdout|
-        stdin.puts "object #{id}"
-        stdin.puts 'type blob'
-        stdin.puts "tag #{key}"
-        stdin.puts "tagger geist <geist@localhost> #{Time.now.strftime '%s %z'}"
-        stdin.puts
-        stdin.close
 
-        id = stdout.read.strip if select [stdout]
-      end
-
-      tag = File.new "#{@path}/refs/tags/#{key}", 'w'
-      tag.write id
-      tag.close
+      cmd "tag -f '#{key}' #{id}"
     end
   end
 
@@ -90,17 +82,17 @@ class Geist
     cmd = "git --git-dir #{@path} #{git_cmd}"
     status = Open4::popen4 cmd do |pid, stdin, stdout, stderr|
       block.call stdin, stdout if block_given?
-      
+
       stdin.close unless stdin.closed?
       stdout.close
       stderr.close
     end
     status
   end
-  
+
   def id_for(key)
     id = nil
-    status = cmd "rev-parse --verify #{key}^{}" do |stdin, stdout|
+    status = cmd "rev-parse '#{key}'" do |stdin, stdout|
       id = stdout.read.strip if select [stdout]
     end
     status.success? ? id : nil
