@@ -23,6 +23,11 @@ g.get :name, :platform #=> ["geist", "ruby"]
 
 ## Internals
 
+To be honest, the introduction was an outright fabrication. Geist is just a
+Ruby API to misuse Git as a simple key-value store. Git itself is a pretty good
+key-value store used to preserve blob (file), tree (directory), commit and tag
+objects.
+
 The Ruby objects to store as values will be marshalled into Git blob objects.
 These objects are referenced with lightweight Git tags named by the given key.
 
@@ -31,11 +36,11 @@ will refer the same Git object.
 
 ## Caveats
 
-Based on Git's [ref naming rules][1] Geist rejects keys that can't be used as
-Git tag names, e.g. containing non-printable characters or backslashes.
+As Geist uses Git tags as keys, only objects with a working `#to_s` method can
+be used as keys. Additionally, based on Git's [ref naming rules][1], Geist
+rejects keys that can't be used as Git tag names, e.g. containing non-printable
+characters or backslashes.
 
- [1]: http://www.kernel.org/pub/software/scm/git/docs/git-check-ref-format.html
- 
 ## License
 
 This code is free software; you can redistribute it and/or modify it under the
@@ -45,3 +50,5 @@ LICENSE file.
 ## Credits
 
  * Sebastian Staudt – koraktor(at)gmail.com
+
+ [1]: http://www.kernel.org/pub/software/scm/git/docs/git-check-ref-format.html
