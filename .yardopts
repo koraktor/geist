@@ -1,0 +1,4 @@
+lib/**/*.rb
+--files LICENSE
+--private
+--title Geist — API Documentation
