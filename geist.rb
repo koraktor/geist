@@ -58,7 +58,7 @@ class Geist
     keys = { keys => value } unless keys.is_a? Hash
 
     keys.each do |key, val|
-      if key.to_s.match /(?:[\W\s^~:?*\[\\]|\.\.|@\{|(?:\/|\.|\.lock)$|^$)/
+      if key.to_s.match(/(?:[\s^~:?*\[\\]|\.\.|@\{|(?:\/|\.|\.lock)$|^$)/)
         warn "Warning: Invalid key '#{key}'"
         return
       end
