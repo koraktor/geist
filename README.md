@@ -1,8 +1,7 @@
 Geist
 =====
 
-Geist is a Git-backed key-value store written in Ruby. You may call it "Git
-Explicit Item Storage Tool" if you really want too.
+Geist is a Git-backed key-value store written in Ruby.
 
 ## Usage
 
@@ -13,12 +12,14 @@ g = Geist.new '~/some/storage/path'
 g.set :foo, 'bar'
 g.set :baz, 123
 g.set :name => 'geist', :platform => 'ruby'
-g.delete :baz
 
 g.keys                 #=> ["foo", "name", "platform"]
 g.get :foo             #=> "bar"
-g.get :baz             #=> nil
+g.get :baz             #=> 123
 g.get :name, :platform #=> ["geist", "ruby"]
+
+g.delete :baz
+g.get :baz             #=> nil
 ```
 
 ## Internals
@@ -26,10 +27,12 @@ g.get :name, :platform #=> ["geist", "ruby"]
 To be honest, the introduction was an outright fabrication. Geist is just a
 Ruby API to misuse Git as a simple key-value store. Git itself is a pretty good
 key-value store used to preserve blob (file), tree (directory), commit and tag
-objects.
+objects. A key-value store used to store versioned file histories in general.
 
-The Ruby objects to store as values will be marshalled into Git blob objects.
-These objects are referenced with lightweight Git tags named by the given key.
+Geist instead uses some low-level Git commands to store arbitrary Ruby objects
+in a Git repository. The Ruby objects to store as values will be marshalled
+into Git blob objects. These objects are referenced with lightweight Git tags
+named by the given key.
 
 Git will not double store duplicate values. Instead, the different key tags
 will refer the same Git object.
