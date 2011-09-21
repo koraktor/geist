@@ -5,22 +5,20 @@ Geist is a Git-backed key-value store written in Ruby.
 
 ## Usage
 
-```ruby
-require 'geist'
+    require 'geist'
 
-g = Geist.new '~/some/storage/path'
-g.set :foo, 'bar'
-g.set :baz, 123
-g.set :name => 'geist', :platform => 'ruby'
+    g = Geist.new '~/some/storage/path'
+    g.set :foo, 'bar'
+    g.set :baz, 123
+    g.set :name => 'geist', :platform => 'ruby'
 
-g.keys                 #=> ["foo", "name", "platform"]
-g.get :foo             #=> "bar"
-g.get :baz             #=> 123
-g.get :name, :platform #=> ["geist", "ruby"]
+    g.keys                 #=> ["foo", "name", "platform"]
+    g.get :foo             #=> "bar"
+    g.get :baz             #=> 123
+    g.get :name, :platform #=> ["geist", "ruby"]
 
-g.delete :baz
-g.get :baz             #=> nil
-```
+    g.delete :baz
+    g.get :baz             #=> nil
 
 ## Internals
 
