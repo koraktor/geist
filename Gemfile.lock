@@ -1,10 +1,20 @@
+PATH
+  remote: .
+  specs:
+    geist (0.1.0)
+      open4 (~> 1.1.0)
+
 GEM
   remote: http://rubygems.org/
   specs:
     open4 (1.1.0)
+    rake (0.9.2)
+    yard (0.7.2)
 
 PLATFORMS
   ruby
 
 DEPENDENCIES
-  open4 (~> 1.1.0)
+  geist!
+  rake (~> 0.9.2)
+  yard (~> 0.7.2)
