@@ -1,4 +1,4 @@
 lib/**/*.rb
---files LICENSE
+--files Changelog.md,LICENSE
 --private
 --title Geist — API Documentation
