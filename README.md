@@ -42,6 +42,11 @@ be used as keys. Additionally, based on Git's [ref naming rules][1], Geist
 rejects keys that can't be used as Git tag names, e.g. containing non-printable
 characters or backslashes.
 
+## History
+
+Geist was an idea for the Codebrawl contest ["Key/value stores"][2] and made it
+to a honorable 6th place out of 18 contestants with a final score of 3.6.
+
 ## License
 
 This code is free software; you can redistribute it and/or modify it under the
@@ -53,3 +58,4 @@ LICENSE file.
  * Sebastian Staudt – koraktor(at)gmail.com
 
  [1]: http://www.kernel.org/pub/software/scm/git/docs/git-check-ref-format.html
+ [2]: http://codebrawl.com/contests/key-value-stores
