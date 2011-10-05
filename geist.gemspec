@@ -15,7 +15,7 @@ Gem::Specification.new do |s|
   s.summary     = 'A Git-backed key-value store'
   s.description = 'Geist is a Git-backed key-value store that stores Ruby objects into a Git repository.'
 
-  s.add_dependency 'open4', '~> 1.1.0'
+  s.add_dependency 'open4', '~> 1.2.0'
 
   s.add_development_dependency 'rake', '~> 0.9.2'
   s.add_development_dependency 'yard', '~> 0.7.2'
